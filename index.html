@@ -39,8 +39,37 @@
 	<SCRIPT type="text/javascript">SimileAjax.History.enabled = false;</SCRIPT>
   </head>
   <body onload=onLoad(); onresize=onResize();>
-    <h1>British Wars from 1600</h1>
-    <p class="lead">A demonstration of a timeline view of a dataset</p>
+  <div class="control-group">
+	<div class="controls">
+		<span class="control-label">Target database table:</span>
+		<select name="TargetTable">
+		</select>
+	</div>
+	<div class="controls">
+	<span class="control-label">Field to use as title:</span>
+		<select name="TitleField">
+		</select>
+	</div>
+	<div>
+	<span>Field to use as event start:</span>
+		<select name="StartField">
+		</select>
+	</div>
+	<div>
+	<span>Field to use as event end (none for events):</span>
+		<select name="EndField">
+			<option value="none">None</option>
+		</select>
+	</div>
+	<div>
+		<span>Field to use for colour (none for default):</span>
+		<select name="ColourField">
+			<option value="none">None</option>
+		</select>
+	</div>
+	<div>
+		<input id="showTimeline" class="btn btn-primary" type="button" value="Show Timeline" onclick="showTimelineFunction();" />
+	</div>
     <DIV id=content>
 
 	<DIV style="HEIGHT: 400px" id="tl" class="timeline-default"></DIV></DIV>
