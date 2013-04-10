@@ -88,10 +88,8 @@ var ColourField
 			//  https://code.google.com/p/simile-widgets/wiki/Timeline_EventSources
 			
 			// Get data from form
-			console.log(TargetTable.val())
-			console.log(TitleField.val())
-			
-			scraperwiki.sql("select * from Sheet1", function(data, textStatus, jqXHR) {
+			var QueryString="Select * from "+TargetTable.val()
+			scraperwiki.sql(QueryString, function(data, textStatus, jqXHR) {
 				//console.log('Great! Here is your war timeline data:', data);
 				GlobalData=data
 				DBaseOutput=
@@ -101,10 +99,12 @@ var ColourField
 				}
 				var i
 				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
-					var e = {
-					  start:GlobalData[i].Start.toString(),
-					  end:GlobalData[i].End.toString(),
-					  title:GlobalData[i].War,color:GlobalData[i].ColourCode
+				// TODO Need to handle None properly here
+					var e = {	
+					  start:GlobalData[i][StartField.val()].toString(),
+					  end:GlobalData[i][EndField.val()].toString(),
+					  title:GlobalData[i][TitleField.val()],
+					  color:GlobalData[i][ColourField.val()]
 					}
 					DBaseOutput.events[i] = e
 				} 
