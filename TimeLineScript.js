@@ -27,7 +27,7 @@ var ColourField
 				TargetTable.append($("<option />").val(name).text(name));
 				});
 			// Populate fields tables
-
+				
 				console.log(metadata.table[tableName].columnNames[0])
 				for (i=0;i<metadata.table[tableName].columnNames.length;i++) {
 				var name=metadata.table[tableName].columnNames[i]
@@ -37,6 +37,28 @@ var ColourField
 				ColourField.append($("<option />").val(name).text(name));
 				};
 				
+			// Make default option selections
+				
+				var StartIndex=searchStringInArray ('start', metadata.table[tableName].columnNames)
+				var EndIndex=searchStringInArray ('end', metadata.table[tableName].columnNames)
+				var ColourIndex=searchStringInArray ('colour', metadata.table[tableName].columnNames)
+				if (ColourIndex == -1){
+					ColourIndex=searchStringInArray ('color', metadata.table[tableName].columnNames)
+					}
+				StartField.prop("selectedIndex",StartIndex+1)
+				if (EndIndex>-1) {
+					EndField.prop("selectedIndex",EndIndex+1)
+					}
+					
+				if (ColourIndex>-1) {
+					ColourField.prop("selectedIndex",ColourIndex+1)
+					}
+					
+			// The only tricky one is the title field where we want to select one the ones which hasn't already been selected. 
+			
+				
+				index = array.indexOf(2)
+				
 			}, function(jqXHR, textStatus, errorThrown){
 				console.log('Oh no! Error:', jqXHR.responseText, textStatus, errorThrown)
 			})
@@ -44,6 +66,12 @@ var ColourField
 
 		}
 		
+		function searchStringInArray (str, strArray) {
+			for (var j=0; j<strArray.length; j++) {
+				if (strArray[j].toLowerCase().match(str)) return j;
+				}
+			return -1;
+}
         function showTimelineFunction() {
             var eventSource = new Timeline.DefaultEventSource(0);
             
@@ -100,14 +128,39 @@ var ColourField
 				var i
 				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
 				// TODO Need to handle None properly here
-					var e = {	
-					  start:GlobalData[i][StartField.val()].toString(),
-					  end:GlobalData[i][EndField.val()].toString(),
-					  title:GlobalData[i][TitleField.val()],
-					  color:GlobalData[i][ColourField.val()]
+				// if EndField is none then set 'durationEvent':false
+				// if ColourField is none then set color='blue'
+					var durationEventValue=true, colourFieldValue='blue'
+					if (EndField.val() == 'none') {
+						durationEventValue = false
+						EndFieldValue = null 
+						console.log(EndField.val())
+						}
+						else {
+						EndFieldValue = GlobalData[i][EndField.val()].toString()
+						}
+					
+					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
+					if (EndField.val() == 'none'){
+						var e = {
+						  start:GlobalData[i][StartField.val()].toString(),
+						  title:GlobalData[i][TitleField.val()],
+						  color:colourFieldValue,
+						  durationEvent:durationEventValue
+						  }
+						}
+						else {
+						var e = {
+						  start:GlobalData[i][StartField.val()].toString(),
+						  end: EndFieldValue,
+						  title:GlobalData[i][TitleField.val()],
+						  color:colourFieldValue,
+						  durationEvent:durationEventValue
+						}
 					}
 					DBaseOutput.events[i] = e
 				} 
+				//console.log(DBaseOutput)
 				//DBaseOutputJSON=JSON.stringify(DBaseOutput)
 				//This doesn't work:
 				eventSource.loadJSON(DBaseOutput, "." ); //document.location.href
