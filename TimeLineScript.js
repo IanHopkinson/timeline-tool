@@ -55,9 +55,6 @@ var ColourField
 					}
 					
 			// The only tricky one is the title field where we want to select one the ones which hasn't already been selected. 
-			
-				
-				index = array.indexOf(2)
 				
 			}, function(jqXHR, textStatus, errorThrown){
 				console.log('Oh no! Error:', jqXHR.responseText, textStatus, errorThrown)
