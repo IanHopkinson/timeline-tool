@@ -6,6 +6,12 @@ var StartField
 var EndField
 var ColourField
 
+//TODO - need to adjust following lines to suit data:
+// var d = Timeline.DateTime.parseGregorianDateTime("1700")
+// intervalUnit:   Timeline.DateTime.DECADE,
+// intervalUnit:   Timeline.DateTime.CENTURY
+//TODO - hook up rainbow checkbox
+//TODO - hook up how to handle the absence of a finish date
 
 		function onLoad() {
 			// Get the table data using a metarequest
@@ -70,6 +76,54 @@ var ColourField
 			return -1;
 }
         function showTimelineFunction() {
+		// Get data from form
+			var QueryString="Select * from "+TargetTable.val()
+			scraperwiki.sql(QueryString, function(data, textStatus, jqXHR) {
+				//console.log('Great! Here is your war timeline data:', data);
+				GlobalData=data
+				DBaseOutput=
+				{
+					'dateTimeFormat': 'iso8601',
+					'events': []
+				}
+				var i, StartArray, EndArray
+				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
+				// TODO Need to handle None properly here
+				// if EndField is none then set 'durationEvent':false
+				// if ColourField is none then set color='blue'
+					var durationEventValue=true, colourFieldValue='blue'
+					if (EndField.val() == 'none') {
+						durationEventValue = false
+						EndFieldValue = null 
+						console.log(EndField.val())
+						}
+						else {
+						EndFieldValue = GlobalData[i][EndField.val()].toString()
+						}
+					
+					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
+					// 
+					if (EndField.val() == 'none'){
+						var e = {
+						  start:GlobalData[i][StartField.val()].toString(),
+						  title:GlobalData[i][TitleField.val()],
+						  color:colourFieldValue,
+						  durationEvent:durationEventValue
+						  }
+						 
+						}
+						else {
+						var e = {
+						  start:GlobalData[i][StartField.val()].toString(),
+						  end: EndFieldValue,
+						  title:GlobalData[i][TitleField.val()],
+						  color:colourFieldValue,
+						  durationEvent:durationEventValue
+						 
+						}
+					}
+					DBaseOutput.events[i] = e
+				} 
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
@@ -79,6 +133,12 @@ var ColourField
             theme.event.bubble.width = 350;
             theme.event.bubble.height = 300;
             
+			// We need to generate sensible defaults here automatically. Allowed values for interval units are:
+			// MILISECOND,
+			// SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, DECADE, CENTURY, MILLENIUM
+			
+			//var max_of_array = Math.max.apply(Math, array);
+
             var d = Timeline.DateTime.parseGregorianDateTime("1700")
             var bandInfos = [
                 Timeline.createBandInfo({
@@ -112,51 +172,7 @@ var ColourField
 			// Copied from the ScraperWiki docs:
 			//  https://code.google.com/p/simile-widgets/wiki/Timeline_EventSources
 			
-			// Get data from form
-			var QueryString="Select * from "+TargetTable.val()
-			scraperwiki.sql(QueryString, function(data, textStatus, jqXHR) {
-				//console.log('Great! Here is your war timeline data:', data);
-				GlobalData=data
-				DBaseOutput=
-				{
-					'dateTimeFormat': 'iso8601',
-					'events': []
-				}
-				var i
-				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
-				// TODO Need to handle None properly here
-				// if EndField is none then set 'durationEvent':false
-				// if ColourField is none then set color='blue'
-					var durationEventValue=true, colourFieldValue='blue'
-					if (EndField.val() == 'none') {
-						durationEventValue = false
-						EndFieldValue = null 
-						console.log(EndField.val())
-						}
-						else {
-						EndFieldValue = GlobalData[i][EndField.val()].toString()
-						}
-					
-					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
-					if (EndField.val() == 'none'){
-						var e = {
-						  start:GlobalData[i][StartField.val()].toString(),
-						  title:GlobalData[i][TitleField.val()],
-						  color:colourFieldValue,
-						  durationEvent:durationEventValue
-						  }
-						}
-						else {
-						var e = {
-						  start:GlobalData[i][StartField.val()].toString(),
-						  end: EndFieldValue,
-						  title:GlobalData[i][TitleField.val()],
-						  color:colourFieldValue,
-						  durationEvent:durationEventValue
-						}
-					}
-					DBaseOutput.events[i] = e
-				} 
+			
 				//console.log(DBaseOutput)
 				//DBaseOutputJSON=JSON.stringify(DBaseOutput)
 				//This doesn't work:
