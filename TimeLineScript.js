@@ -5,6 +5,7 @@ var TitleField
 var StartField
 var EndField
 var ColourField
+var earliest=Infinity, latest=-Infinity
 
 //TODO - need to adjust following lines to suit data:
 // var d = Timeline.DateTime.parseGregorianDateTime("1700")
@@ -78,6 +79,8 @@ var ColourField
         function showTimelineFunction() {
 		// Get data from form
 			var QueryString="Select * from "+TargetTable.val()
+			var d = moment()
+			//console.log(d.valueOf())
 			scraperwiki.sql(QueryString, function(data, textStatus, jqXHR) {
 				//console.log('Great! Here is your war timeline data:', data);
 				GlobalData=data
@@ -87,6 +90,7 @@ var ColourField
 					'events': []
 				}
 				var i, StartArray, EndArray
+				
 				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
 				// TODO Need to handle None properly here
 				// if EndField is none then set 'durationEvent':false
@@ -102,7 +106,7 @@ var ColourField
 						}
 					
 					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
-					// 
+					// Populate the events data structure
 					if (EndField.val() == 'none'){
 						var e = {
 						  start:GlobalData[i][StartField.val()].toString(),
@@ -122,8 +126,22 @@ var ColourField
 						 
 						}
 					}
+					if (moment(e.start)<earliest) {
+						earliest = moment(e.start)
+						}
+					if (moment(e.end)>latest) {
+						latest = moment(e.end)
+						}
+					if (moment(e.end)<earliest) {
+						earliest = moment(e.end)
+						}
+					if (moment(e.start)>latest) {
+						latest = moment(e.start)
+						}
 					DBaseOutput.events[i] = e
 				} 
+				console.log(earliest)
+				console.log(latest)
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
@@ -138,12 +156,30 @@ var ColourField
 			// SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, DECADE, CENTURY, MILLENIUM
 			
 			//var max_of_array = Math.max.apply(Math, array);
-
-            var d = Timeline.DateTime.parseGregorianDateTime("1700")
+			var midpoint=(latest.year()-earliest.year())/2+earliest.year()
+			var span=Math.floor(Math.log((latest.year()-earliest.year())/2+earliest.year())/Math.log(10))
+			
+			if (span == 3){
+				smallInterval=Timeline.DateTime.DECADE
+				bigInterval=Timeline.DateTime.CENTURY
+				}
+				
+			if (span == 2){
+				smallInterval=Timeline.DateTime.YEAR
+				bigInterval=Timeline.DateTime.DECADE
+				}
+				
+			if (span == 1){
+				smallInterval=Timeline.DateTime.MONTH
+				bigInterval=Timeline.DateTime.YEAR
+				}
+				
+            //var d = Timeline.DateTime.parseGregorianDateTime("1700")
+			var d = Timeline.DateTime.parseGregorianDateTime(midpoint)
             var bandInfos = [
                 Timeline.createBandInfo({
                     width:          "80%", 
-                    intervalUnit:   Timeline.DateTime.DECADE, 
+                    intervalUnit:   smallInterval, 
                     intervalPixels: 200,
                     eventSource:    eventSource,
                     date:           d,
@@ -152,7 +188,7 @@ var ColourField
                 }),
                 Timeline.createBandInfo({
                     width:          "20%", 
-                    intervalUnit:   Timeline.DateTime.CENTURY, 
+                    intervalUnit:   bigInterval, 
                     intervalPixels: 200,
                     eventSource:    eventSource,
                     date:           d,
