@@ -5,7 +5,8 @@ var TitleField, StartField, EndField, ColourField
 var earliest=Infinity, latest=-Infinity
 
 //TODO - hook up rainbow checkbox
-//TODO - hook up how to handle the absence of a finish date
+//TODO - need to add a vertical scrollbar, example here:
+//http://trunk.simile-widgets.org/timeline/examples/compact-painter/compact-painter.html
 
 		function onLoad() {
 			// Get the table data using a metarequest
@@ -86,12 +87,15 @@ var earliest=Infinity, latest=-Infinity
 					'events': []
 				}
 				var i, StartArray, EndArray
-				
+				var rainbow=['red','orange','yellow','green','blue','indigo','violet']
 				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
 				// TODO Need to handle None properly here
 				// if EndField is none then set 'durationEvent':false
 				// if ColourField is none then set color='blue'
 					var durationEventValue=true, colourFieldValue='blue'
+					if (cbRainbow.is(':checked')){
+						colourFieldValue = rainbow[i%7]
+						}
 					if (EndField.val() == 'none') {
 						durationEventValue = false
 						EndFieldValue = null 
@@ -99,8 +103,10 @@ var earliest=Infinity, latest=-Infinity
 						}
 						else {
 						// This handles null event ends according to the checkbox setting
-						console.log(cbNullIsNow.is(':checked'))
+						console.log("**Separator**")
+						console.log(GlobalData[i][EndField.val()].toString())
 						if (GlobalData[i][EndField.val()].toString() == '' && cbNullIsNow.is(':checked')){
+							console.log(GlobalData[i][EndField.val()].toString())
 							EndFieldValue = moment().format()
 							}
 							else {
@@ -112,7 +118,7 @@ var earliest=Infinity, latest=-Infinity
 					if (EndField.val() == 'none'){
 						var e = {
 						  start:GlobalData[i][StartField.val()].toString(),
-						  title:GlobalData[i][TitleField.val()],
+						  title: i.toString()+GlobalData[i][TitleField.val()],
 						  color:colourFieldValue,
 						  durationEvent:durationEventValue
 						  }
@@ -122,7 +128,7 @@ var earliest=Infinity, latest=-Infinity
 						var e = {
 						  start:GlobalData[i][StartField.val()].toString(),
 						  end: EndFieldValue,
-						  title:GlobalData[i][TitleField.val()],
+						  title:i.toString()+GlobalData[i][TitleField.val()],
 						  color:colourFieldValue,
 						  durationEvent:durationEventValue
 						 
@@ -144,8 +150,7 @@ var earliest=Infinity, latest=-Infinity
 						}
 					DBaseOutput.events[i] = e
 				} 
-				console.log(earliest)
-				console.log(latest)
+			console.log(DBaseOutput)
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
