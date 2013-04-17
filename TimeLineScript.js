@@ -1,16 +1,9 @@
 var tl;
 var GlobalData
 var TargetTable
-var TitleField
-var StartField
-var EndField
-var ColourField
+var TitleField, StartField, EndField, ColourField
 var earliest=Infinity, latest=-Infinity
 
-//TODO - need to adjust following lines to suit data:
-// var d = Timeline.DateTime.parseGregorianDateTime("1700")
-// intervalUnit:   Timeline.DateTime.DECADE,
-// intervalUnit:   Timeline.DateTime.CENTURY
 //TODO - hook up rainbow checkbox
 //TODO - hook up how to handle the absence of a finish date
 
@@ -21,7 +14,8 @@ var earliest=Infinity, latest=-Infinity
 			StartField = $('select[name="StartField"]');
 			EndField = $('select[name="EndField"]');
 			ColourField = $('select[name="ColourField"]');
-
+			
+			
 			scraperwiki.sql.meta(function(metadata, textStatus, jqXHR) {
 			for(tableName in metadata.table){
 				console.log('table:', tableName, 'columns:', metadata.table[tableName].columnNames)
@@ -77,6 +71,8 @@ var earliest=Infinity, latest=-Infinity
 			return -1;
 }
         function showTimelineFunction() {
+			cbRainbow = $('#rainbowColours');
+			cbNullIsNow = $('#missingEndDatesNow');
 		// Get data from form
 			var QueryString="Select * from "+TargetTable.val()
 			var d = moment()
@@ -99,12 +95,18 @@ var earliest=Infinity, latest=-Infinity
 					if (EndField.val() == 'none') {
 						durationEventValue = false
 						EndFieldValue = null 
-						console.log(EndField.val())
+						//console.log(EndField.val())
 						}
 						else {
-						EndFieldValue = GlobalData[i][EndField.val()].toString()
+						// This handles null event ends according to the checkbox setting
+						console.log(cbNullIsNow.is(':checked'))
+						if (GlobalData[i][EndField.val()].toString() == '' && cbNullIsNow.is(':checked')){
+							EndFieldValue = moment().format()
+							}
+							else {
+							EndFieldValue = GlobalData[i][EndField.val()].toString()
+							}
 						}
-					
 					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
 					// Populate the events data structure
 					if (EndField.val() == 'none'){
