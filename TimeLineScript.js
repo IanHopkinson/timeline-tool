@@ -126,17 +126,19 @@ var earliest=Infinity, latest=-Infinity
 						 
 						}
 					}
-					if (moment(e.start)<earliest) {
-						earliest = moment(e.start)
+					// Establish earliest and latest dates on the time line. Maybe I should use the ternary operator here.
+					var firstmoment=moment(e.start), lastmoment=moment(e.end)
+					if (firstmoment<earliest && firstmoment!==null) {
+						earliest = firstmoment
 						}
-					if (moment(e.end)>latest) {
-						latest = moment(e.end)
+					if (lastmoment>latest && lastmoment!==null) {
+						latest = lastmoment
 						}
-					if (moment(e.end)<earliest) {
-						earliest = moment(e.end)
+					if (lastmoment<earliest && lastmoment!==null) {
+						earliest = lastmoment
 						}
-					if (moment(e.start)>latest) {
-						latest = moment(e.start)
+					if (firstmoment>latest && firstmoment!==null) {
+						latest = firstmoment
 						}
 					DBaseOutput.events[i] = e
 				} 
@@ -157,21 +159,22 @@ var earliest=Infinity, latest=-Infinity
 			
 			//var max_of_array = Math.max.apply(Math, array);
 			var midpoint=(latest.year()-earliest.year())/2+earliest.year()
-			var span=Math.floor(Math.log((latest.year()-earliest.year())/2+earliest.year())/Math.log(10))
-			
-			if (span == 3){
+			var span=(latest.year()-earliest.year())
+			var logspan=Math.round(Math.log(span)/Math.log(10))
+			console.log(span)
+			if (logspan == 3){
 				smallInterval=Timeline.DateTime.DECADE
 				bigInterval=Timeline.DateTime.CENTURY
 				}
 				
-			if (span == 2){
+			if (logspan == 2){
 				smallInterval=Timeline.DateTime.YEAR
 				bigInterval=Timeline.DateTime.DECADE
 				}
 				
-			if (span == 1){
-				smallInterval=Timeline.DateTime.MONTH
-				bigInterval=Timeline.DateTime.YEAR
+			if (logspan == 1){
+				smallInterval=Timeline.DateTime.YEAR
+				bigInterval=Timeline.DateTime.DECADE
 				}
 				
             //var d = Timeline.DateTime.parseGregorianDateTime("1700")
