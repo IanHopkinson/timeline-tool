@@ -43,32 +43,32 @@
 	<SCRIPT type="text/javascript">SimileAjax.History.enabled = false;</SCRIPT>
   </head>
   <body onload=onLoad(); onresize=onResize();>
-  <div class="control-group">
-	<div class="controls">
-		<span class="control-label">Target database table:</span>
-		<select name="TargetTable">
+  <div>
+	<div>
+		<span>Table:</span>
+			<select name="TargetTable">
 		</select>
 	</div>
-	<div class="controls">
-	<span class="control-label">Field to use as title:</span>
+	<div>
+	<span>Title:</span>
 		<select name="TitleField">
 			<option value="none">None</option>
 		</select>
 	</div>
 	<div>
-	<span>Field to use as event start:</span>
+	<span>Start:</span>
 		<select name="StartField">
 			<option value="none">None</option>
 		</select>
 	</div>
 	<div>
-	<span>Field to use as event end (none for events):</span>
+	<span>End (none for events):</span>
 		<select name="EndField">
 			<option value="none">None</option>
 		</select>
 	</div>
 	<div>
-		<span>Field to use for colour (none for default):</span>
+		<span>Colour (none for default):</span>
 		<select name="ColourField">
 			<option value="none">None</option>
 		</select>
@@ -86,6 +86,6 @@
 	</div>
     <DIV id=content>
 
-	<DIV style="HEIGHT: 800px" id="tl" class="timeline-default"></DIV></DIV>
+	<DIV style="height: 400px; font-size: 12px;" id="tl" class="timeline-default"></DIV></DIV>
   </body>
 </html>

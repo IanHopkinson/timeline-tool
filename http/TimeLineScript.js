@@ -19,7 +19,7 @@ var earliest=Infinity, latest=-Infinity
 			
 			scraperwiki.sql.meta(function(metadata, textStatus, jqXHR) {
 			for(tableName in metadata.table){
-				console.log('table:', tableName, 'columns:', metadata.table[tableName].columnNames)
+				//console.log('table:', tableName, 'columns:', metadata.table[tableName].columnNames)
 			}
 			// Populate table options in the form with data from query
 			// TODO - bug here that we always select the last one
@@ -30,7 +30,7 @@ var earliest=Infinity, latest=-Infinity
 				});
 			// Populate fields tables
 				
-				console.log(metadata.table[tableName].columnNames[0])
+				//console.log(metadata.table[tableName].columnNames[0])
 				for (i=0;i<metadata.table[tableName].columnNames.length;i++) {
 				var name=metadata.table[tableName].columnNames[i]
 				TitleField.append($("<option />").val(name).text(name));
@@ -103,10 +103,10 @@ var earliest=Infinity, latest=-Infinity
 						}
 						else {
 						// This handles null event ends according to the checkbox setting
-						console.log("**Separator**")
-						console.log(GlobalData[i][EndField.val()].toString())
+						//console.log("**Separator**")
+						//console.log(GlobalData[i][EndField.val()].toString())
 						if (GlobalData[i][EndField.val()].toString() == '' && cbNullIsNow.is(':checked')){
-							console.log(GlobalData[i][EndField.val()].toString())
+							//console.log(GlobalData[i][EndField.val()].toString())
 							EndFieldValue = moment().format()
 							}
 							else {
@@ -118,7 +118,7 @@ var earliest=Infinity, latest=-Infinity
 					if (EndField.val() == 'none'){
 						var e = {
 						  start:GlobalData[i][StartField.val()].toString(),
-						  title: i.toString()+GlobalData[i][TitleField.val()],
+						  title:GlobalData[i][TitleField.val()],
 						  color:colourFieldValue,
 						  durationEvent:durationEventValue
 						  }
@@ -128,7 +128,7 @@ var earliest=Infinity, latest=-Infinity
 						var e = {
 						  start:GlobalData[i][StartField.val()].toString(),
 						  end: EndFieldValue,
-						  title:i.toString()+GlobalData[i][TitleField.val()],
+						  title:GlobalData[i][TitleField.val()],
 						  color:colourFieldValue,
 						  durationEvent:durationEventValue
 						 
@@ -150,7 +150,7 @@ var earliest=Infinity, latest=-Infinity
 						}
 					DBaseOutput.events[i] = e
 				} 
-			console.log(DBaseOutput)
+			//console.log(DBaseOutput)
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
@@ -168,7 +168,7 @@ var earliest=Infinity, latest=-Infinity
 			var midpoint=(latest.year()-earliest.year())/2+earliest.year()
 			var span=(latest.year()-earliest.year())
 			var logspan=Math.round(Math.log(span)/Math.log(10))
-			console.log(span)
+			//console.log(span)
 			if (logspan == 3){
 				smallInterval=Timeline.DateTime.DECADE
 				bigInterval=Timeline.DateTime.CENTURY
