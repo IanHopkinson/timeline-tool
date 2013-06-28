@@ -1,0 +1,127 @@
+/* Copied from Zarino */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  position: relative;
+  padding: 0;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 300px;
+  background: #e4e8ee;
+  border-right: 1px solid #BBCEE4;
+}
+
+#chart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 301px;
+}
+
+footer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
+/* Sidebar structure */
+
+nav > div,
+nav > section {
+  padding: 15px;
+}
+
+nav > section {
+  border-bottom: 1px solid #BBCEE4;
+  display:;
+  line-height: 30px;
+}
+
+nav p {
+  margin-bottom: 5px;
+}
+
+nav p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Form elements */
+
+input {
+  margin: 0;
+}
+
+input[type="checkbox"] {
+  vertical-align: 1px;
+}
+
+label {
+  display: inline-block;
+  margin: 0;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #6e7e8d;
+}
+
+input[type="checkbox"] + label,
+p.inline-select input[type="checkbox"] + label {
+  margin-left: 5px;
+}
+
+p.inline-select label {
+  margin: 0 5px 0 0;
+  /* My try at aigning label left*/
+  float: left;
+} 
+
+p.inline-select select {
+  margin: 0;
+  width: 200px;
+  text-align: right;
+}
+
+p.inline-select {
+  text-align: center;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+/* Original styling for Simile timeline */
+/* body { padding: 20px; text-align: center; }*/
+h2 { margin-top: 0; }
+.interesting {
+  width: 19em;
+  margin: 0 auto;
+  padding: 8px 14px;
+  text-align: left;
+  color: #68460B;
+}
+.interesting h4 {
+  text-align: center;
+  color: inherit;
+  margin: 10px 0;
+}
+#return { cursor: pointer; }
+#help {
+  margin-left: 5px;
+  font-size: 0.7em;
+  cursor: pointer;
+}
+li img {
+  vertical-align: -2px;
+  opacity: 0.8;
+    }

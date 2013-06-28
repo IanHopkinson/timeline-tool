@@ -3,35 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Code your own view!</title>
-    <link rel="stylesheet" href="//beta.scraperwiki.com/vendor/style/bootstrap.min.css">
-    <link rel="stylesheet" href="//beta.scraperwiki.com/style/scraperwiki.css">
-    <style type="text/css">
-    body { padding: 20px; text-align: center; }
-    h2 { margin-top: 0; }
-    .interesting {
-      width: 19em;
-      margin: 0 auto;
-      padding: 8px 14px;
-      text-align: left;
-      color: #68460B;
-    }
-    .interesting h4 {
-      text-align: center;
-      color: inherit;
-      margin: 10px 0;
-    }
-    #return { cursor: pointer; }
-    #help {
-      margin-left: 5px;
-      font-size: 0.7em;
-      cursor: pointer;
-    }
-    li img {
-      vertical-align: -2px;
-      opacity: 0.8;
-    }
-	
-    </style>
+    <link rel="stylesheet" href="https://beta.scraperwiki.com/vendor/style/bootstrap.min.css">
+    <link rel="stylesheet" href="https://beta.scraperwiki.com/style/scraperwiki.css">
+    <link rel="stylesheet" href="style.css">
+    
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js"></script>
     <script src="//beta.scraperwiki.com/vendor/js/bootstrap.min.js"></script>
@@ -43,49 +18,55 @@
 	<SCRIPT type="text/javascript">SimileAjax.History.enabled = false;</SCRIPT>
   </head>
   <body onload=onLoad(); onresize=onResize();>
-  <div>
-	<div>
-		<span>Table:</span>
-			<select name="TargetTable">
-		</select>
-	</div>
-	<div>
-	<span>Title:</span>
-		<select name="TitleField">
-			<option value="none">None</option>
-		</select>
-	</div>
-	<div>
-	<span>Start:</span>
-		<select name="StartField">
-			<option value="none">None</option>
-		</select>
-	</div>
-	<div>
-	<span>End (none for events):</span>
-		<select name="EndField">
-			<option value="none">None</option>
-		</select>
-	</div>
-	<div>
-		<span>Colour (none for default):</span>
-		<select name="ColourField">
-			<option value="none">None</option>
-		</select>
-	</div>
-	<div>
-		<span>Treat missing end dates as now</span>
-		<input type="checkbox" id="missingEndDatesNow" />
-	</div>
-	<div>
-		<span>Make rainbow colours</span>
-		<input type="checkbox" id="rainbowColours" />
-	</div>
+  <nav>
+    <section id="category-select">
+        <p class id="inline-select">
+            <label for="sourceTable">Source:</label>
+            <select id="sourceTable"></select>
+        </p>
+        <p class id="inline-select">
+            <label for="titleField">Title:</label>
+            <select id="titleField">
+                <option value="none">None</option>
+            </select>
+        </p>
+    </section>
+    <section id="timecontrols">
+        <p class id="inline-select">
+            <label for="startField">Start:</label>
+            <select id="startField">
+                <option value="none">None</option>
+            </select>
+        </p>
+        <p class id="inline-select">
+            <label for="endField">End:</label>
+            <select id="endField">
+                <option value="none">None</option>
+            </select>
+        </p>
+        <p>
+            <input type="checkbox" id="missingEndDatesNow">
+            <label for="missingEndDatesNow">Missing dates as now</label>
+        </p>
+    </section>
+    <section id="colourControls">
+        <p class id="inline-select">
+            <label for="colourField">Colour:</label>
+            <select id="colourField">
+                <option value="none">None</option>
+            </select>
+        </p>
+        <p>
+          <input type="checkbox" id="rainbowColours">
+          <label for="rainbowColours">Rainbow colours</label>
+        </p>
+    </section>
 	<div>
 		<input id="showTimeline" class="btn btn-primary" type="button" value="Show Timeline" onclick="showTimelineFunction();" />
 	</div>
-    <DIV id=content>
+    </nav>
+    <div id="chart">
 
-	<DIV style="height: 400px; font-size: 12px;" id="tl" class="timeline-default"></DIV></DIV>
+	<div style="height: 400px" id="tl" class="timeline-default"></div></div>
   </body>
 </html>

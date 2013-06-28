@@ -1,25 +1,31 @@
 var tl;
 var GlobalData
 var TargetTable
-var TitleField, StartField, EndField, ColourField
+var TitleField
+var StartField
+var EndField
+var ColourField
 var earliest=Infinity, latest=-Infinity
 
+//TODO - need to adjust following lines to suit data:
+// var d = Timeline.DateTime.parseGregorianDateTime("1700")
+// intervalUnit:   Timeline.DateTime.DECADE,
+// intervalUnit:   Timeline.DateTime.CENTURY
 //TODO - hook up rainbow checkbox
-//TODO - need to add a vertical scrollbar, example here:
-//http://trunk.simile-widgets.org/timeline/examples/compact-painter/compact-painter.html
+//TODO - hook up how to handle the absence of a finish date
+//TODO 
 
 		function onLoad() {
 			// Get the table data using a metarequest
-			TargetTable = $('select[name="TargetTable"]');
-			TitleField = $('select[name="TitleField"]');
-			StartField = $('select[name="StartField"]');
-			EndField = $('select[name="EndField"]');
-			ColourField = $('select[name="ColourField"]');
-			
-			
+			TargetTable = $('select[id="sourceTable"]');
+			TitleField = $('select[id="titleField"]');
+			StartField = $('select[id="startField"]');
+			EndField = $('select[id="endField"]');
+			ColourField = $('select[id="colourField"]');
+
 			scraperwiki.sql.meta(function(metadata, textStatus, jqXHR) {
 			for(tableName in metadata.table){
-				//console.log('table:', tableName, 'columns:', metadata.table[tableName].columnNames)
+				console.log('table:', tableName, 'columns:', metadata.table[tableName].columnNames)
 			}
 			// Populate table options in the form with data from query
 			// TODO - bug here that we always select the last one
@@ -30,7 +36,7 @@ var earliest=Infinity, latest=-Infinity
 				});
 			// Populate fields tables
 				
-				//console.log(metadata.table[tableName].columnNames[0])
+				console.log(metadata.table[tableName].columnNames[0])
 				for (i=0;i<metadata.table[tableName].columnNames.length;i++) {
 				var name=metadata.table[tableName].columnNames[i]
 				TitleField.append($("<option />").val(name).text(name));
@@ -72,8 +78,6 @@ var earliest=Infinity, latest=-Infinity
 			return -1;
 }
         function showTimelineFunction() {
-			cbRainbow = $('#rainbowColours');
-			cbNullIsNow = $('#missingEndDatesNow');
 		// Get data from form
 			var QueryString="Select * from "+TargetTable.val()
 			var d = moment()
@@ -87,32 +91,21 @@ var earliest=Infinity, latest=-Infinity
 					'events': []
 				}
 				var i, StartArray, EndArray
-				var rainbow=['red','orange','yellow','green','blue','indigo','violet']
+				
 				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
 				// TODO Need to handle None properly here
 				// if EndField is none then set 'durationEvent':false
 				// if ColourField is none then set color='blue'
 					var durationEventValue=true, colourFieldValue='blue'
-					if (cbRainbow.is(':checked')){
-						colourFieldValue = rainbow[i%7]
-						}
 					if (EndField.val() == 'none') {
 						durationEventValue = false
 						EndFieldValue = null 
-						//console.log(EndField.val())
+						console.log(EndField.val())
 						}
 						else {
-						// This handles null event ends according to the checkbox setting
-						//console.log("**Separator**")
-						//console.log(GlobalData[i][EndField.val()].toString())
-						if (GlobalData[i][EndField.val()].toString() == '' && cbNullIsNow.is(':checked')){
-							//console.log(GlobalData[i][EndField.val()].toString())
-							EndFieldValue = moment().format()
-							}
-							else {
-							EndFieldValue = GlobalData[i][EndField.val()].toString()
-							}
+						EndFieldValue = GlobalData[i][EndField.val()].toString()
 						}
+					
 					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
 					// Populate the events data structure
 					if (EndField.val() == 'none'){
@@ -134,23 +127,22 @@ var earliest=Infinity, latest=-Infinity
 						 
 						}
 					}
-					// Establish earliest and latest dates on the time line. Maybe I should use the ternary operator here.
-					var firstmoment=moment(e.start), lastmoment=moment(e.end)
-					if (firstmoment<earliest && firstmoment!==null) {
-						earliest = firstmoment
+					if (moment(e.start)<earliest) {
+						earliest = moment(e.start)
 						}
-					if (lastmoment>latest && lastmoment!==null) {
-						latest = lastmoment
+					if (moment(e.end)>latest) {
+						latest = moment(e.end)
 						}
-					if (lastmoment<earliest && lastmoment!==null) {
-						earliest = lastmoment
+					if (moment(e.end)<earliest) {
+						earliest = moment(e.end)
 						}
-					if (firstmoment>latest && firstmoment!==null) {
-						latest = firstmoment
+					if (moment(e.start)>latest) {
+						latest = moment(e.start)
 						}
 					DBaseOutput.events[i] = e
 				} 
-			//console.log(DBaseOutput)
+				console.log(earliest)
+				console.log(latest)
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
@@ -165,23 +157,24 @@ var earliest=Infinity, latest=-Infinity
 			// SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, DECADE, CENTURY, MILLENIUM
 			
 			//var max_of_array = Math.max.apply(Math, array);
+			console.log(latest)
+			console.log(earliest)
 			var midpoint=(latest.year()-earliest.year())/2+earliest.year()
-			var span=(latest.year()-earliest.year())
-			var logspan=Math.round(Math.log(span)/Math.log(10))
-			//console.log(span)
-			if (logspan == 3){
+			var span=Math.floor(Math.log((latest.year()-earliest.year())/2+earliest.year())/Math.log(10))
+			
+			if (span == 3){
 				smallInterval=Timeline.DateTime.DECADE
 				bigInterval=Timeline.DateTime.CENTURY
 				}
 				
-			if (logspan == 2){
+			if (span == 2){
 				smallInterval=Timeline.DateTime.YEAR
 				bigInterval=Timeline.DateTime.DECADE
 				}
 				
-			if (logspan == 1){
-				smallInterval=Timeline.DateTime.YEAR
-				bigInterval=Timeline.DateTime.DECADE
+			if (span == 1){
+				smallInterval=Timeline.DateTime.MONTH
+				bigInterval=Timeline.DateTime.YEAR
 				}
 				
             //var d = Timeline.DateTime.parseGregorianDateTime("1700")
