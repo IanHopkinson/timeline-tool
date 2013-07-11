@@ -7,14 +7,6 @@ var EndField
 var ColourField
 var earliest=Infinity, latest=-Infinity
 
-//TODO - need to adjust following lines to suit data:
-// var d = Timeline.DateTime.parseGregorianDateTime("1700")
-// intervalUnit:   Timeline.DateTime.DECADE,
-// intervalUnit:   Timeline.DateTime.CENTURY
-//TODO - hook up rainbow checkbox
-//TODO - hook up how to handle the absence of a finish date
-//TODO 
-
 		function onLoad() {
 			// Get the table data using a metarequest
 			TargetTable = $('select[id="sourceTable"]');
@@ -30,9 +22,8 @@ var earliest=Infinity, latest=-Infinity
 			// Populate table options in the form with data from query
 			// TODO - bug here that we always select the last one
 				
-				$.each(metadata.table, function(name) {
-				//console.log(name)
-				TargetTable.append($("<option />").val(name).text(name));
+                $.each(metadata.table, function(name) {
+                    TargetTable.append($("<option />").val(name).text(name));
 				});
 			// Populate fields tables
 				
@@ -84,9 +75,7 @@ var earliest=Infinity, latest=-Infinity
 		// Get data from form
 			var QueryString="Select * from "+TargetTable.val()
 			var d = moment()
-			//console.log(d.valueOf())
 			scraperwiki.sql(QueryString, function(data, textStatus, jqXHR) {
-				//console.log('Great! Here is your war timeline data:', data);
 				GlobalData=data
 				DBaseOutput=
 				{
@@ -95,10 +84,8 @@ var earliest=Infinity, latest=-Infinity
 				}
 				var i, StartArray, EndArray
 				
-				for (i=0; i<GlobalData.length; i++){ //GlobalData.length
+				for (i=0; i<GlobalData.length; i++){ 
 				// TODO Need to handle None properly here
-				// if EndField is none then set 'durationEvent':false
-				// if ColourField is none then set color='blue'
 					var durationEventValue=true, colourFieldValue='blue'
                     if (cbRainbow.is(':checked')){
 						colourFieldValue = rainbow[i%7]
@@ -106,10 +93,15 @@ var earliest=Infinity, latest=-Infinity
 					if (EndField.val() == 'none') {
 						durationEventValue = false
 						EndFieldValue = null 
-						console.log(EndField.val())
 						}
 						else {
-						EndFieldValue = GlobalData[i][EndField.val()].toString()
+						if (GlobalData[i][EndField.val()].toString() == '' && cbNullIsNow.is(':checked')){
+							console.log(GlobalData[i][EndField.val()].toString())
+							EndFieldValue = moment().format()
+							}
+							else {
+                            EndFieldValue = GlobalData[i][EndField.val()].toString()
+                            }
 						}
 					
 					if (ColourField.val() != 'none') {colourFieldValue = GlobalData[i][ColourField.val()]}
@@ -209,22 +201,7 @@ var earliest=Infinity, latest=-Infinity
             bandInfos[1].highlight = true;
                         
             tl = Timeline.create(document.getElementById("tl"), bandInfos, Timeline.HORIZONTAL);
-            // Adding the date to the url stops browser caching of data during testing or if
-            // the data source is a dynamic query...
-            // 
-			//tl.loadJSON("TimeLineData.js?"+ (new Date().getTime()), function(json, url) {
-			//tl.loadJSON("IngeniousPursuitsData.js", function(json, url) {
-			// Copied from the ScraperWiki docs:
-			//  https://code.google.com/p/simile-widgets/wiki/Timeline_EventSources
-			
-			
-				//console.log(DBaseOutput)
-				//DBaseOutputJSON=JSON.stringify(DBaseOutput)
-				//This doesn't work:
-				eventSource.loadJSON(DBaseOutput, "." ); //document.location.href
-				// This works:
-				//tl.loadJSON("WarsData.js?"+ (new Date().getTime()), function(json, url) {eventSource.loadJSON(json, url);});
-			
+				eventSource.loadJSON(DBaseOutput, "." ); 			
 			}, function(jqXHR, textStatus, errorThrown){
 				console.log('Oh no! Error:', jqXHR.responseText, textStatus, errorThrown)
 			})
