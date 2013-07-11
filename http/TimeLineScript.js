@@ -127,22 +127,26 @@ var earliest=Infinity, latest=-Infinity
 						 
 						}
 					}
-					if (moment(e.start)<earliest) {
-						earliest = moment(e.start)
+                    
+                    if (moment(e.start) !== null) {
+                        if (moment(e.start)<earliest) {
+                            earliest = moment(e.start)
+                            }
+                        if (moment(e.start)>latest) {
+                            latest = moment(e.start)
 						}
-					if (moment(e.end)>latest) {
-						latest = moment(e.end)
-						}
-					if (moment(e.end)<earliest) {
-						earliest = moment(e.end)
-						}
-					if (moment(e.start)>latest) {
-						latest = moment(e.start)
-						}
+                        }
+                    if (moment(e.end) !== null) {
+                        if (moment(e.end)>latest) {
+                            latest = moment(e.end)
+                            }
+                        if (moment(e.end)<earliest) {
+                            earliest = moment(e.end)
+                            }
+                    }
+
 					DBaseOutput.events[i] = e
 				} 
-				console.log(earliest)
-				console.log(latest)
             var eventSource = new Timeline.DefaultEventSource(0);
             
             // Example of changing the theme from the defaults
