@@ -61,12 +61,15 @@
           <label for="rainbowColours">Rainbow colours</label>
         </p>
     </section>
-	<div>
-		<input id="showTimeline" class="btn btn-primary" type="button" value="Show Timeline" onclick="showTimelineFunction();" />
-	</div>
+	<section id="colourControls">
+		<input id="showTimeline" class="btn btn-primary" type="button" value="Go!" onclick="showTimelineFunction();" />
+	</section>
     </nav>
     <div id="chart">
-        <div style="height: 400px" id="tl" class="timeline-default"></div>
+        <div style="height: 400px; margin: 20px 0px 0px 0px; " id="tl" class="timeline-default"></div>
     </div>
+    <footer>
+      <a class="btn btn-danger" href="https://github.com/IanHopkinson/timeline-tool/issues" target="_blank">Report a bug</a>
+    </footer>
   </body>
 </html>
