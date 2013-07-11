@@ -78,6 +78,9 @@ var earliest=Infinity, latest=-Infinity
 			return -1;
 }
         function showTimelineFunction() {
+            cbRainbow = $('#rainbowColours');
+			cbNullIsNow = $('#missingEndDatesNow');
+            var rainbow=['red','orange','yellow','green','blue','indigo','violet']
 		// Get data from form
 			var QueryString="Select * from "+TargetTable.val()
 			var d = moment()
@@ -97,6 +100,9 @@ var earliest=Infinity, latest=-Infinity
 				// if EndField is none then set 'durationEvent':false
 				// if ColourField is none then set color='blue'
 					var durationEventValue=true, colourFieldValue='blue'
+                    if (cbRainbow.is(':checked')){
+						colourFieldValue = rainbow[i%7]
+						}
 					if (EndField.val() == 'none') {
 						durationEventValue = false
 						EndFieldValue = null 
@@ -128,22 +134,20 @@ var earliest=Infinity, latest=-Infinity
 						}
 					}
                     
-                    if (moment(e.start) !== null) {
-                        if (moment(e.start)<earliest) {
-                            earliest = moment(e.start)
-                            }
-                        if (moment(e.start)>latest) {
-                            latest = moment(e.start)
+                    // Establish earliest and latest dates on the time line. Maybe I should use the ternary operator here.
+					var firstmoment=moment(e.start), lastmoment=moment(e.end)
+					if (firstmoment<earliest && firstmoment!==null) {
+						earliest = firstmoment
 						}
-                        }
-                    if (moment(e.end) !== null) {
-                        if (moment(e.end)>latest) {
-                            latest = moment(e.end)
-                            }
-                        if (moment(e.end)<earliest) {
-                            earliest = moment(e.end)
-                            }
-                    }
+					if (lastmoment>latest && lastmoment!==null) {
+						latest = lastmoment
+						}
+					if (lastmoment<earliest && lastmoment!==null) {
+						earliest = lastmoment
+						}
+					if (firstmoment>latest && firstmoment!==null) {
+						latest = firstmoment
+						}
 
 					DBaseOutput.events[i] = e
 				} 
@@ -161,8 +165,6 @@ var earliest=Infinity, latest=-Infinity
 			// SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, DECADE, CENTURY, MILLENIUM
 			
 			//var max_of_array = Math.max.apply(Math, array);
-			console.log(latest)
-			console.log(earliest)
 			var midpoint=(latest.year()-earliest.year())/2+earliest.year()
 			var span=Math.floor(Math.log((latest.year()-earliest.year())/2+earliest.year())/Math.log(10))
 			
