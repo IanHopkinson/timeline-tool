@@ -1,4 +1,5 @@
 {
-  "displayName": "Make a timeline view",
-  "description": "Make a scrollable timeline view of your data"
+  "displayName": "View as a timeline",
+  "description": "Make a scrollable timeline view of your data",
+  "color": "#E45858"
 }
