@@ -163,8 +163,9 @@
     padding-left: 5px;
     padding-bottom: 5px;
 }.timeline-container {
-    position: relative;
-    overflow: hidden;
+    /* position: relative;
+    overflow: hidden; */
+    overflow-x:hidden; overflow-y:scroll; position: relative;
 }
 
 .timeline-copyright {

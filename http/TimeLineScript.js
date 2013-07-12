@@ -179,15 +179,6 @@ var earliest=Infinity, latest=-Infinity
 			var d = Timeline.DateTime.parseGregorianDateTime(midpoint)
             var bandInfos = [
                 Timeline.createBandInfo({
-                    width:          "80%", 
-                    intervalUnit:   smallInterval, 
-                    intervalPixels: 200,
-                    eventSource:    eventSource,
-                    date:           d,
-                    theme:          theme,
-                    layout:         'original'  // original, overview, detailed
-                }),
-                Timeline.createBandInfo({
                     width:          "20%", 
                     intervalUnit:   bigInterval, 
                     intervalPixels: 200,
@@ -195,6 +186,15 @@ var earliest=Infinity, latest=-Infinity
                     date:           d,
                     theme:          theme,
                     layout:         'overview'  // original, overview, detailed
+                }),
+                Timeline.createBandInfo({
+                    width:          "80%", 
+                    intervalUnit:   smallInterval, 
+                    intervalPixels: 200,
+                    eventSource:    eventSource,
+                    date:           d,
+                    theme:          theme,
+                    layout:         'original'  // original, overview, detailed
                 })
             ];
             bandInfos[1].syncWith = 0;

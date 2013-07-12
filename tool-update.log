@@ -1,0 +1,9 @@
+From git://git.scraperwiki.net/timeline
+   87a0ad2..0e97dd3  master     -> origin/master
+Updating 87a0ad2..0e97dd3
+Fast-forward
+ scraperwiki.json | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+From git://git.scraperwiki.net/timeline
+   0e97dd3..b46b8a3  master     -> origin/master
+Already up-to-date.

@@ -1,4 +1,4 @@
-﻿
+
 
 /* band.js */
 Timeline._Band=function(B,G,C){if(B.autoWidth&&typeof G.width=="string"){G.width=G.width.indexOf("%")>-1?0:parseInt(G.width);
@@ -139,7 +139,8 @@ this._softPaintEvents();
 Timeline._Band.prototype.setBandShiftAndWidth=function(A,D){var C=this._keyboardInput.parentNode;
 var B=A+Math.floor(D/2);
 if(this._timeline.isHorizontal()){this._div.style.top=A+"px";
-this._div.style.height=D+"px";
+/*this._div.style.height=D+"px";*/
+this._div.style.height="100%";
 C.style.top=B+"px";
 C.style.left="-1em";
 }else{this._div.style.left=A+"px";
@@ -2536,7 +2537,7 @@ this.event={track:{height:10,gap:2,offset:2,autoWidthMargin:1.5},overviewTrack:{
 },wikiStyler:function(A){A.className="timeline-event-bubble-wiki";
 },timeStyler:function(A){A.className="timeline-event-bubble-time";
 }}};
-this.mouseWheel="scroll";
+this.mouseWheel="default";
 };
 
 
